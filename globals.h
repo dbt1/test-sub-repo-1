@@ -23,7 +23,7 @@
 #define __GLOBALS_H__
 
 
-#define P_VERSION "0.78"
+#define P_VERSION "0.79"
 
 #define ADS_FILE 	"/tmp/blockads.ads"
 #define ZAP_FILE	"/tmp/blockads.zap"
