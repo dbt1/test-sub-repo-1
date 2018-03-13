@@ -107,9 +107,10 @@
 
 //freetype stuff
 
-#define FONT2 "/share/fonts/pakenham.ttf"
+#define FONT FONTDIR "/neutrino.ttf"
 // if font is not in usual place, we look here:
-#define FONT "/share/fonts/neutrino.ttf"
+#define FONT2 FONTDIR "/pakenham.ttf"
+
 
 enum {FILL, GRID};
 enum {LEFT, CENTER, RIGHT};
@@ -148,15 +149,5 @@ extern struct fb_var_screeninfo var_screeninfo;
 
 extern int startx, starty, sx, ex, sy, ey;
 extern unsigned char *proxyadress, *proxyuserpwd;
-
-
-#define FB_DEVICE	"/dev/fb/0"
-/*
-#if HAVE_DVB_API_VERSION < 3
-#define RC_DEVICE	"/dev/dbox/rc0"
-#else
-#define RC_DEVICE	"/dev/input/event0"
-#endif
-*/
 
 #endif

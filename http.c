@@ -36,7 +36,7 @@
 //#include <linux/delay.h>
 #include "blockads.h"
 
-int HTTP_downloadFile(char *host, int port, char *page, char *downloadTarget, int tmo, int repeats)
+int HTTP_downloadFile(char *host, int port, char *page, char *downloadTarget, int tmo __attribute__((unused)), int repeats __attribute__((unused)))
 {
 	char tstr[256];
 	

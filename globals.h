@@ -25,14 +25,27 @@
 
 #define P_VERSION "0.79"
 
+#ifndef FB_DEVICE
+#define FB_DEVICE	"/dev/fb/0"
+#endif
+#ifndef FB_DEVICE_FALLBACK
+#define FB_DEVICE_FALLBACK	"/dev/fb0"
+#endif
+#ifndef CONFIGDIR
+#define CONFIGDIR "/var/tuxbox/config"
+#endif
+#ifndef FONTDIR
+#define FONTDIR	"/share/fonts"
+#endif
+
 #define ADS_FILE 	"/tmp/blockads.ads"
 #define ZAP_FILE	"/tmp/blockads.zap"
 #define LST_FILE	"/tmp/blockads.lst"
 #define FLG_FILE	"/tmp/blockads.flg"
 #define MSG_FILE	"/tmp/blockads.msg"
 #define STS_FILE	"/tmp/blockads.sts"
-#define CFG_FILE	"/var/tuxbox/config/blockads.conf"
-#define NCF_FILE 	"/var/tuxbox/config/neutrino.conf"
+#define CFG_FILE	CONFIGDIR "/blockads.conf"
+#define NCF_FILE 	CONFIGDIR "/neutrino.conf"
 #define NUM_CHANNELS 12
 
 

@@ -382,7 +382,7 @@ int avol, amut;
 	{
 		if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
 		{
-			while((fgets(zstr, sizeof(zstr), fh1)>0) && !strlen(zstr));
+			while((fgets(zstr, sizeof(zstr), fh1)) && !strlen(zstr));
 			if(strlen(zstr)>=1)
 			{
 				Trim_String(zstr);
@@ -395,7 +395,7 @@ int avol, amut;
 	{
 		if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
 		{
-			while((fgets(zstr, sizeof(zstr), fh1)>0) && !strlen(zstr));
+			while((fgets(zstr, sizeof(zstr), fh1)) && !strlen(zstr));
 			if(strlen(zstr)>=1)
 			{
 				Trim_String(zstr);

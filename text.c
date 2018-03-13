@@ -27,11 +27,12 @@
  * MyFaceRequester
  ******************************************************************************/
 
-FT_Error MyFaceRequester(FTC_FaceID face_id, FT_Library library, FT_Pointer request_data, FT_Face *aface)
+FT_Error MyFaceRequester(FTC_FaceID face_id, FT_Library _library, FT_Pointer request_data, FT_Face *aface)
 {
 	FT_Error result;
+	(void)request_data;
 
-	result = FT_New_Face(library, face_id, 0, aface);
+	result = FT_New_Face(_library, face_id, 0, aface);
 
 	if(!result) printf("<Font \"%s\" loaded>\n", (char*)face_id);
 	else        printf("<Font \"%s\" failed>\n", (char*)face_id);
@@ -112,7 +113,7 @@ return sbit->xadvance + kerning.x;
  * GetStringLen
  ******************************************************************************/
 
-int GetStringLen(unsigned char *string)
+int GetStringLen(char *string)
 {
 	int stringlen = 0;
 

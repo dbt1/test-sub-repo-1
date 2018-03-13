@@ -267,9 +267,16 @@ FILE *fh1,*fh2;
 	if((fh1=fopen(FLG_FILE,"r"))==NULL)
 	{
 //		system("ping -c 5 google.com &");
-		fb = open(FB_DEVICE, O_RDWR);
-//		rc = open(RC_DEVICE, O_RDONLY);
-//		fcntl(rc, F_SETFL, (fcntl(rc, F_GETFL) | O_EXCL) & ~O_NONBLOCK);
+
+		/* open Framebuffer */
+		fb=open(FB_DEVICE, O_RDWR);
+		if (fb < 0)
+			fb=open(FB_DEVICE_FALLBACK, O_RDWR);
+		if (fb < 0) {
+			perror("Blockads <open framebuffer>");
+			exit(1);
+		}
+
 		InitRC();
 
 		read_neutrino_osd_conf ( &ex,&sx,&ey, &sy);
@@ -396,7 +403,7 @@ FILE *fh1,*fh2;
 			{
 				if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
 				{
-					while((fgets(line_buffer, sizeof(line_buffer), fh1)>0) && (strlen(line_buffer)<4));
+					while((fgets(line_buffer, sizeof(line_buffer), fh1)) && (strlen(line_buffer)<4));
 					if(strlen(line_buffer)>1)
 					{
 						Trim_String(line_buffer);
@@ -446,7 +453,7 @@ FILE *fh1,*fh2;
 			{
 				if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
 				{
-					while((fgets(line_buffer, sizeof(line_buffer), fh1)>0) && !strlen(line_buffer));
+					while((fgets(line_buffer, sizeof(line_buffer), fh1)) && !strlen(line_buffer));
 					if(strlen(line_buffer)>=1)
 					{
 						Trim_String(line_buffer);
@@ -459,7 +466,7 @@ FILE *fh1,*fh2;
 			{
 				if((fh1=fopen(ZAP_FILE,"r"))!=NULL)
 				{
-					while((fgets(line_buffer, sizeof(line_buffer), fh1)>0) && !strlen(line_buffer));
+					while((fgets(line_buffer, sizeof(line_buffer), fh1)) && !strlen(line_buffer));
 					if(strlen(line_buffer)>=1)
 					{
 						Trim_String(line_buffer);

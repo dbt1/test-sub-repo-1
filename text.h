@@ -28,6 +28,6 @@
 FT_Error MyFaceRequester(FTC_FaceID face_id, FT_Library library, FT_Pointer request_data, FT_Face *aface);
 void RenderString(char *string, int sx, int sy, int maxwidth, int layout, int size, int color);
 void ShowMessage(char *message, int wait);
-int GetStringLen(unsigned char *string);
+int GetStringLen(char *string);
 
 #endif

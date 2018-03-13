@@ -21,6 +21,7 @@
 
 #include "io.h"
 #include "blockads.h"
+#include "rc_device.h"
 
 struct input_event ev;
 static unsigned short rccode=-1;
@@ -28,7 +29,10 @@ static int rc;
 
 int InitRC(void)
 {
-	rc = open(RC_DEVICE, O_RDONLY);
+	/* open Remote Control */
+	rc = open(RC_DEVICE, O_RDONLY | O_CLOEXEC);
+	if(rc == -1)
+		rc = open(RC_DEVICE_FALLBACK, O_RDONLY | O_CLOEXEC);
 	if(rc == -1)
 	{
 		perror("Blockads <open remote control>");
@@ -69,15 +73,15 @@ int GetRCCode()
 
 	if(read(rc, &ev, sizeof(ev)) == sizeof(ev))
 	{
-		if(ev.value > 0 && ev.code != rc_last_key)
+		if(ev.value)
 		{
-			if ( ev.value == 2 )	
+			if (ev.code == rc_last_key)	
 			{
 				while ( count < REPEAT_TIMER )			
 				{
 					count++;
 					rccode = -1;
-					usleep(15000L);
+					usleep(1000000/100);
 					return rccode;
 				}
 			}
