@@ -123,7 +123,7 @@ int GetStringLen(char *string)
 
 	//calc len
 
-		while(*string != '\0')
+		while(*string)
 		{
 			stringlen += RenderChar(*string, -1, -1, -1, -1);
 			string++;
@@ -192,7 +192,7 @@ void RenderString(char *string, int sx, int sy, int maxwidth, int layout, int si
 
 		ex = sx + maxwidth;
 
-		while(*rptr != '\0')
+		while(*rptr)
 		{
 			if((charwidth = RenderChar(*rptr, sx, sy, ex, color)) == -1) return; /* string > maxwidth */
 
