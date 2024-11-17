@@ -1,0 +1,86 @@
+ 
+name: Update Main Repository
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  update-main-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v3
+        with:
+          repository: dbt1/test-main-repo
+          token: ${{ secrets.PAT }}
+          path: main_repo
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Collect Commit Messages
+        id: collect_messages
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const commits = context.payload.commits;
+            let mergeDetected = false;
+            let commitMessages = '';
+
+            for (const commit of commits) {
+              const message = commit.message;
+              const author = commit.author.name;
+
+              if (message.startsWith('Merge')) {
+                mergeDetected = true;
+              }
+
+              commitMessages += `\n- ${message} (von ${author})`;
+            }
+
+            core.setOutput('commit_messages', commitMessages);
+            core.setOutput('merge_detected', mergeDetected);
+
+      - name: Update Submodule Reference
+        run: |
+          cd main_repo
+
+          # Initialisiere Submodule
+          git submodule update --init
+
+          # Ermittele den Namen des aktualisierten Submoduls und Branch
+          SUBMODULE_REPO="$GITHUB_REPOSITORY"
+          SUBMODULE_NAME=$(basename "$SUBMODULE_REPO")
+          SUBMODULE_BRANCH="$GITHUB_REF_NAME" # Branch-Name des Submoduls
+
+          echo "Aktualisiere Submodul: $SUBMODULE_NAME auf Branch: $SUBMODULE_BRANCH"
+
+          # Wechsle in das Submodul-Verzeichnis
+          cd "$SUBMODULE_NAME"
+
+          # Hole den neuesten Commit aus dem Submodul-Repository
+          git fetch origin "$SUBMODULE_BRANCH"
+          git checkout "$GITHUB_SHA"
+
+          # Zurück ins Haupt-Repository
+          cd ..
+
+          # Erstelle oder aktualisiere denselben Branch im Hauptrepository
+          git checkout -B "$SUBMODULE_BRANCH"
+          git add "$SUBMODULE_NAME"
+
+          # Erstelle die angepasste Commit-Nachricht
+          if [ "${{ steps.collect_messages.outputs.merge_detected }}" = "true" ]; then
+            COMMIT_MESSAGE="Update Superproject (mit Merge)\n\nSubmodul: '$SUBMODULE_REPO'\nBranch: '$SUBMODULE_BRANCH'\n\nSubmodul Commit Messages:${{ steps.collect_messages.outputs.commit_messages }}"
+          else
+            COMMIT_MESSAGE="Update Superproject\n\nSubmodul: '$SUBMODULE_REPO'\nBranch: '$SUBMODULE_BRANCH'\n\nSubmodul Commit Messages:${{ steps.collect_messages.outputs.commit_messages }}"
+          fi
+
+          # Commit und Push
+          git commit -m "$COMMIT_MESSAGE"
+          git push origin "$SUBMODULE_BRANCH"
